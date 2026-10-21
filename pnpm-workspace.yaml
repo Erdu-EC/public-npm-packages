@@ -1,5 +1,5 @@
 packages:
-  - 'nuxt-shared/backend-data/*'
+  - 'nuxt-shared/backend-data'
   - 'dotnet-shared/*'
 
 allowBuilds:
