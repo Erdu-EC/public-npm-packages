@@ -1,0 +1,9 @@
+{
+  "name": "public-npm-packages",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r run build",
+    "typecheck": "pnpm -r run typecheck"
+  }
+}

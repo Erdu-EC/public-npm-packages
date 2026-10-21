@@ -1,0 +1,6 @@
+packages:
+  - 'nuxt-shared/backend-data/*'
+  - 'dotnet-shared/*'
+
+allowBuilds:
+  esbuild: true

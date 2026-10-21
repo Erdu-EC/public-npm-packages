@@ -1,0 +1,78 @@
+name: CI & Publish Backend Data
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'nuxt-shared/backend-data/**'
+      - '.github/workflows/backend-data.yml'
+  pull_request:
+    paths:
+      - 'nuxt-shared/backend-data/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-test:
+    name: Build & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Typecheck
+        run: pnpm --filter ./nuxt-shared/backend-data run typecheck
+
+      - name: Build package
+        run: pnpm --filter ./nuxt-shared/backend-data run build
+
+  publish:
+    name: Publish to GitHub Packages
+    needs: build-and-test
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@${{ github.repository_owner }}'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build package
+        run: pnpm --filter ./nuxt-shared/backend-data run build
+
+      - name: Publish to GitHub Packages
+        run: pnpm --filter ./nuxt-shared/backend-data publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
