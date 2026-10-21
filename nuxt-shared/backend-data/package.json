@@ -39,7 +39,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Erdu-EC/npm-packages.git",
+    "url": "git+https://github.com/Erdu-EC/public-npm-packages.git",
     "directory": "nuxt-shared/backend-data"
   },
   "scripts": {
