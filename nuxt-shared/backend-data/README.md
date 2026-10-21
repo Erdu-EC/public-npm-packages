@@ -1,8 +1,10 @@
 # @erdu-ec/nuxt-backend-data
 
-Reusable strongly-typed data-fetching architecture, endpoint factories, and multi-API client scopes for Nuxt 4 applications.
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](./package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
+[![Nuxt](https://img.shields.io/badge/Nuxt-4.0%2B-00DC82.svg)](https://nuxt.com/)
 
----
+Reusable strongly-typed data-fetching architecture, endpoint factories, and multi-API client scopes for Nuxt 4 applications.
 
 ## Features
 
@@ -13,7 +15,10 @@ Reusable strongly-typed data-fetching architecture, endpoint factories, and mult
 - 🌐 **Multi-API Scope Isolation (`createApiScope`)**: Type multiple independent APIs/microservices (e.g., Auth API, Core API, Billing API) within the same application, each with its own route contracts, base URLs, and `$fetch` / `useFetch` instances.
 - 🔌 **Nuxt Module Included**: Auto-imports composables and utilities throughout your Nuxt application.
 
----
+## Requirements
+
+- [Nuxt](https://nuxt.com/) `^4.0.0`
+- [Vue](https://vuejs.org/) `^3.0.0`
 
 ## Installation
 
@@ -23,16 +28,19 @@ pnpm add @erdu-ec/nuxt-backend-data
 
 # npm
 npm install @erdu-ec/nuxt-backend-data
+
+# yarn
+yarn add @erdu-ec/nuxt-backend-data
 ```
 
-Ensure your `.npmrc` is configured for the `@erdu-ec` scope on GitHub Packages:
+### GitHub Packages Configuration
+
+This package is published to [GitHub Packages](https://github.com/features/packages). Ensure your `.npmrc` is configured for the `@erdu-ec` scope:
 
 ```ini
 @erdu-ec:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
-
----
 
 ## Setup as a Nuxt Module
 
@@ -52,11 +60,10 @@ export default defineNuxtConfig({
 ```
 
 When enabled as a module:
+
 - All fetch factories (`useDefineApiFetch`, `useDefineLazyApiFetch`, `defineDirectApiFetch`, `createApiScope`, `defaultApiScope`) and utilities (`getDefaultFetchOptions`) are automatically auto-imported across your application.
 - If `backendData.fetcher` is specified in `nuxt.config.ts`, the module registers an internal runtime plugin that configures `configureBackendData({ fetcher: ... })` automatically.
 - TypeScript types and NuxtApp augmentations are seamlessly provided.
-
----
 
 ## Quick Start (Single API)
 
@@ -133,42 +140,31 @@ import {
 
 export const useUserApi = (fetcher?: $Fetch) => {
   return {
-    // 1. Reactive Queries (useFetch)
-    // Lazy query for list (non-blocking hydration)
+    // Reactive Queries (useFetch)
     getUsers: useDefineLazyApiFetch('/v1/users', fetcher),
-
-    // Parameterized reactive query with automatic MaybeRefOrGetter unwrapping
     getUser: useDefineApiFetch((id: string) => `/v1/users/${id}` as const, fetcher),
 
-    // 2. Imperative Operations ($fetch)
-    // Imperative GET (for on-demand fetching)
+    // Imperative Operations ($fetch)
     fetchUserDirect: defineDirectApiFetch('GET', (id: string) => `/v1/users/${id}` as const, fetcher),
-
-    // Mutations (POST, PUT, PATCH automatically expect a typed body argument)
     createUser: defineDirectApiFetch('POST', '/v1/users', fetcher),
     updateUser: defineDirectApiFetch('PUT', (id: string) => `/v1/users/${id}` as const, fetcher),
-
-    // Deletions (DELETE does not require body argument by default)
     deleteUser: defineDirectApiFetch('DELETE', (id: string) => `/v1/users/${id}` as const, fetcher)
   };
 };
 ```
 
-### 3. Consume in Components
+### 4. Consume in Components
 
 ```vue
 <!-- components/UserProfile.vue -->
 <script setup lang="ts">
 const { getUsers, getUser, createUser, deleteUser } = useUserApi();
 
-// Static reactive query
 const { data: users, status, refresh } = getUsers();
 
-// Dynamic reactive query with a ref (re-fetches automatically when userId changes)
 const selectedUserId = ref('usr_123');
 const { data: user, pending } = getUser(selectedUserId);
 
-// Imperative mutation triggered on user action
 async function handleCreate() {
   const newUser = await createUser({
     name: 'Alice Cooper',
@@ -178,7 +174,6 @@ async function handleCreate() {
   await refresh();
 }
 
-// Imperative delete
 async function handleDelete(id: string) {
   await deleteUser(id);
   await refresh();
@@ -198,11 +193,9 @@ async function handleDelete(id: string) {
 </template>
 ```
 
----
-
 ## Multi-API Scope Architecture (`createApiScope`)
 
-When an application communicates with multiple microservices or distinct APIs (e.g. Main Backend, Authentication Service, Billing Service), use `createApiScope<Routes>()` to isolate route typing and fetch configurations.
+When an application communicates with multiple microservices or distinct APIs, use `createApiScope<Routes>()` to isolate route typing and fetch configurations.
 
 ### 1. Define Routes for Each API
 
@@ -250,22 +243,14 @@ export type BillingRoutes = {
 
 ### 2. Instantiate API Scopes
 
-Scopes can be configured using:
-- Direct `$Fetch` instance.
-- Resolver function receiving `NuxtApp`: `(nuxt) => nuxt.$customFetch`.
-- Zero-argument factory function: `() => customFetch`.
-- Options object with custom `fetcher` and custom `useFetch`.
-
 ```ts
 // services/apis.ts
 import { createApiScope } from '@erdu-ec/nuxt-backend-data';
 import type { AuthRoutes } from '~/types/authApi';
 import type { BillingRoutes } from '~/types/billingApi';
 
-// Auth Scope: resolves fetcher from NuxtApp plugin
 export const authApi = createApiScope<AuthRoutes>((nuxt) => nuxt?.$authFetch as $Fetch);
 
-// Billing Scope: configured with custom useFetch or factory
 export const billingApi = createApiScope<BillingRoutes>({
   fetcher: () => billingFetchInstance,
   useFetch: useBillingFetch
@@ -280,7 +265,6 @@ import { authApi } from '~/services/apis';
 
 export const useAuth = () => {
   return {
-    // Autocompletes only AuthRoutes with exact body/response validation
     login: authApi.defineDirectApiFetch('POST', '/auth/login'),
     logout: authApi.defineDirectApiFetch('POST', '/auth/logout')
   };
@@ -291,7 +275,6 @@ import { billingApi } from '~/services/apis';
 
 export const useBilling = () => {
   return {
-    // Autocompletes only BillingRoutes
     invoicesQuery: billingApi.useDefineLazyApiFetch('/billing/invoices'),
     payInvoice: billingApi.defineDirectApiFetch(
       'POST',
@@ -301,18 +284,24 @@ export const useBilling = () => {
 };
 ```
 
----
+## Exports
 
-## Exported Subpaths
+| Subpath | Types | Import | Description |
+| --- | --- | --- | --- |
+| `@erdu-ec/nuxt-backend-data` | `./dist/types.d.mts` | `./dist/module.mjs` | Main bundle (module, default composables, types, utilities) |
+| `@erdu-ec/nuxt-backend-data/composables` | `./dist/runtime/composables/index.d.ts` | `./dist/runtime/composables/index.js` | Composable factories (`createApiScope`, `defaultApiScope`, `useDefineApiFetch`, `useDefineLazyApiFetch`, `defineDirectApiFetch`) |
+| `@erdu-ec/nuxt-backend-data/types` | `./dist/runtime/types/index.d.ts` | `./dist/runtime/types/index.js` | TypeScript contracts (`ApiEndpointRoutes`, `ApiScope`, `ApiFetchOptions`, etc.) |
+| `@erdu-ec/nuxt-backend-data/utils` | `./dist/runtime/utils/index.d.ts` | `./dist/runtime/utils/index.js` | Pure utilities (`getDefaultFetchOptions`, `createMethods`) |
 
-| Subpath | Description |
-| :--- | :--- |
-| `@erdu-ec/nuxt-backend-data` | Main bundle (module, default composables, types, utilities) |
-| `@erdu-ec/nuxt-backend-data/composables` | Composable factories (`createApiScope`, `defaultApiScope`, `useDefineApiFetch`, `useDefineLazyApiFetch`, `defineDirectApiFetch`) |
-| `@erdu-ec/nuxt-backend-data/types` | TypeScript contracts (`ApiEndpointRoutes`, `ApiScope`, `ApiFetchOptions`, etc.) |
-| `@erdu-ec/nuxt-backend-data/utils` | Pure utilities (`getDefaultFetchOptions`, `createMethods`) |
+## Scripts
 
----
+| Script | Description |
+| --- | --- |
+| `build` | Build the package using `@nuxt/module-builder` |
+| `dev:prepare` | Prepare Nuxt types for development |
+| `prepare` | Prepare Nuxt types (runs on install) |
+| `prepack` | Build before packaging/publishing |
+| `typecheck` | Type-check with `vue-tsc --noEmit` |
 
 ## License
 
