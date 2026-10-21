@@ -33,15 +33,6 @@ npm install @erdu-ec/nuxt-backend-data
 yarn add @erdu-ec/nuxt-backend-data
 ```
 
-### GitHub Packages Configuration
-
-This package is published to [GitHub Packages](https://github.com/features/packages). Ensure your `.npmrc` is configured for the `@erdu-ec` scope:
-
-```ini
-@erdu-ec:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
 ## Setup as a Nuxt Module
 
 Add the package to the `modules` array in your `nuxt.config.ts`:
