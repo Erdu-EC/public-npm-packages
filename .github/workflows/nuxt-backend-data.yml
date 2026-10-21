@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'nuxt-shared/backend-data/**'
-      - '.github/workflows/backend-data.yml'
+      - '.github/workflows/nuxt-backend-data.yml'
   pull_request:
     paths:
       - 'nuxt-shared/backend-data/**'
