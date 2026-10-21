@@ -1,6 +1,6 @@
 {
   "name": "@erdu-ec/nuxt-backend-data",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Reusable typed backend data and fetch composables layer for Nuxt applications",
   "keywords": [
     "nuxt",
