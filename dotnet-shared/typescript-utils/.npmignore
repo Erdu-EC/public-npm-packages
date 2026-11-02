@@ -16,4 +16,4 @@ node_modules/
 *.log
 
 # Tests
-src/__tests__/
+src/**/__tests__/

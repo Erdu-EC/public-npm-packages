@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "prepublishOnly": "npm run clean && npm run build",
+    "prepublishOnly": "pnpm run clean && pnpm run build",
     "test": "npx tsx --test 'src/**/__tests__/*.test.ts'",
     "typecheck": "tsc --noEmit"
   },
@@ -38,7 +38,6 @@
     "typescript": "^7.0.2"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ]
 }
