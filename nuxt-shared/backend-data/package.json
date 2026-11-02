@@ -44,16 +44,17 @@
   },
   "scripts": {
     "build": "nuxt-module-build build",
+    "clean": "rm -rf dist .nuxt",
     "dev:prepare": "nuxt prepare",
     "prepare": "nuxt prepare",
     "prepack": "nuxt-module-build build",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.0.0",
     "defu": "^6.1.4"
   },
   "peerDependencies": {
+    "@nuxt/kit": "^4.0.0",
     "nuxt": "^4.0.0",
     "vue": "^3.0.0"
   },
@@ -62,6 +63,7 @@
     "@nuxt/module-builder": "^1.0.3",
     "@types/node": "^22.13.0",
     "nuxt": "^4.6.2",
+    "rollup": "4.67.3",
     "typescript": "^5.9.3",
     "vue": "^3.5.13",
     "vue-tsc": "^3.3.13"

@@ -1,3 +1,4 @@
+import type {NuxtModule} from '@nuxt/schema';
 import {defineNuxtModule, addImportsDir, addImports, addPlugin, createResolver} from '@nuxt/kit';
 import {defu} from 'defu';
 
@@ -14,7 +15,7 @@ export interface ModulePublicRuntimeConfig {
     };
 }
 
-export default defineNuxtModule<ModuleOptions>({
+const module: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
     meta: {
         name: '@erdu-ec/nuxt-backend-data',
         configKey: 'backendData',
@@ -48,6 +49,8 @@ export default defineNuxtModule<ModuleOptions>({
         });
     }
 });
+
+export default module;
 
 // Re-export runtime public types for consumption in host apps
 export type * from './runtime/types';

@@ -2,8 +2,11 @@
   "name": "public-npm-packages",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@12.16.1",
   "scripts": {
     "build": "pnpm -r run build",
+    "clean": "pnpm -r run clean && rm -rf node_modules",
+    "test": "pnpm -r run test",
     "typecheck": "pnpm -r run typecheck"
   }
 }

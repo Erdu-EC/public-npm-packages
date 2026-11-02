@@ -1,0 +1,101 @@
+name: CI & Publish Dotnet TypeScript Utils
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'dotnet-shared/typescript-utils/**'
+      - '.github/workflows/dotnet-typescript-utils.yml'
+  pull_request:
+    paths:
+      - 'dotnet-shared/typescript-utils/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm --filter ./dotnet-shared/typescript-utils run test
+
+      - name: Typecheck
+        run: pnpm --filter ./dotnet-shared/typescript-utils run typecheck
+
+      - name: Build package
+        run: pnpm --filter ./dotnet-shared/typescript-utils run build
+
+  publish-npm:
+    name: Publish to npm
+    needs: build-and-test
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build package
+        run: pnpm --filter ./dotnet-shared/typescript-utils run build
+
+      - name: Get version from package.json
+        id: package-version
+        run: echo "version=$(node -p "require('./dotnet-shared/typescript-utils/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: tag-check
+        run: |
+          TAG="v${{ steps.package-version.outputs.version }}"
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and push tag
+        if: steps.tag-check.outputs.exists == 'false'
+        run: |
+          TAG="v${{ steps.package-version.outputs.version }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Publish to npm
+        if: steps.tag-check.outputs.exists == 'false'
+        run: pnpm --filter ./dotnet-shared/typescript-utils publish --access public --no-git-checks --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
