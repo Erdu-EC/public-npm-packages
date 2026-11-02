@@ -9,7 +9,7 @@ const ISO_DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
  * Type guard: checks whether a string is a valid .NET DateTime format.
  * Accepts local (no timezone), UTC (`Z`), and offset (`+HH:MM`/`-HH:MM`) formats.
  */
-export function isValidDateTimeString(value: string): value is ISODateString {
+export function isDateTimeString(value: string): value is ISODateString {
     return ISO_DATETIME_RE.test(value);
 }
 
@@ -18,14 +18,14 @@ export function isValidDateTimeString(value: string): value is ISODateString {
  * This is a subset of `ISODateString` — use this to distinguish offset strings from
  * local or UTC strings.
  */
-export function isDateTimeOffsetString(value: string): value is DateTimeOffsetString {
+export function isOffsetDateTime(value: string): value is DateTimeOffsetString {
     return ISO_DATETIME_RE.test(value) && /[+-]\d{2}:\d{2}$/.test(value);
 }
 
 /**
  * Type guard: checks whether a string is a valid .NET DateOnly format.
  */
-export function isValidDateOnlyString(value: string): value is ISODateOnlyString {
+export function isDateOnlyString(value: string): value is ISODateOnlyString {
     return ISO_DATE_ONLY_RE.test(value);
 }
 
@@ -36,8 +36,8 @@ export function isValidDateOnlyString(value: string): value is ISODateOnlyString
  *
  * @throws `RangeError` if the string is not a valid DateTime format.
  */
-export function dateTimeStringToDate(value: ISODateString): Date {
-    if (!isValidDateTimeString(value)) {
+export function parseDateTime(value: ISODateString): Date {
+    if (!isDateTimeString(value)) {
         throw new RangeError(`Invalid DateTime string: "${value}"`);
     }
 
@@ -68,8 +68,8 @@ export function dateTimeStringToDate(value: ISODateString): Date {
  *
  * @throws `RangeError` if the string is not a valid DateOnly format.
  */
-export function dateOnlyStringToDate(value: ISODateOnlyString): Date {
-    if (!isValidDateOnlyString(value)) {
+export function parseDateOnly(value: ISODateOnlyString): Date {
+    if (!isDateOnlyString(value)) {
         throw new RangeError(`Invalid DateOnly string: "${value}"`);
     }
 
@@ -92,26 +92,14 @@ export function dateOnlyStringToDate(value: ISODateOnlyString): Date {
  * Since JavaScript `Date` is inherently a UTC point in time, `toISOString()` is the
  * most faithful representation.
  */
-export function dateToDateTimeString(date: Date): ISODateString {
+export function toDateTimeString(date: Date): ISODateString {
     return date.toISOString() as ISODateString;
-}
-
-/**
- * Converts a JavaScript `Date` to a .NET DateTimeOffset string with the local timezone offset.
- * Uses `toISOString()` for the base datetime and appends the local offset.
- */
-export function dateToDateTimeOffsetString(date: Date): ISODateString {
-    const offset = date.getTimezoneOffset();
-    const offsetSign = offset <= 0 ? '+' : '-';
-    const offsetHours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0');
-    const offsetMinutes = String(Math.abs(offset) % 60).padStart(2, '0');
-    return date.toISOString().replace('Z', `${offsetSign}${offsetHours}:${offsetMinutes}`) as ISODateString;
 }
 
 /**
  * Converts a JavaScript `Date` to a .NET DateOnly string (UTC date portion).
  */
-export function dateToDateOnlyString(date: Date): ISODateOnlyString {
+export function toDateOnlyString(date: Date): ISODateOnlyString {
     const year = String(date.getUTCFullYear()).padStart(4, '0');
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
     const day = String(date.getUTCDate()).padStart(2, '0');

@@ -1,11 +1,11 @@
 export type { ISODateOnlyString, ISODateString, DateTimeOffsetString } from './ISODateString';
 export {
-  isValidDateTimeString,
-  isValidDateOnlyString,
-  isDateTimeOffsetString,
-  dateTimeStringToDate,
-  dateOnlyStringToDate,
-  dateToDateTimeString,
-  dateToDateTimeOffsetString,
-  dateToDateOnlyString,
+  isDateTimeString,
+  isDateOnlyString,
+  isOffsetDateTime,
+  parseDateTime,
+  parseDateOnly,
+  toDateTimeString,
+  toDateTimeOffsetString,
+  toDateOnlyString,
 } from './utils';
