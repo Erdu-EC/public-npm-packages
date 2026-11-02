@@ -1,6 +1,6 @@
 # dotnet-typescript-utils
 
-[![npm version](https://img.shields.io/npm/v/dotnet-typescript-utils.svg)](https://www.npmjs.com/package/dotnet-typescript-utils)
+[![npm version](https://img.shields.io/npm/v/@erdu-ec/dotnet-typescript-utils.svg)](https://www.npmjs.com/package/@erdu-ec/dotnet-typescript-utils)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 TypeScript types and utilities for .NET 8+ date, time, and value types.
@@ -10,7 +10,7 @@ This package provides **template literal types** and **runtime utility functions
 ## Installation
 
 ```bash
-npm install dotnet-typescript-utils
+npm install @erdu-ec/dotnet-typescript-utils
 ```
 
 ## Quick Reference
@@ -93,7 +93,7 @@ import {
   parseDateOnly,
   toDateTimeString,
   toDateOnlyString,
-} from 'dotnet-typescript-utils';
+} from '@erdu-ec/dotnet-typescript-utils';
 
 // Type guards
 isDateTimeString("2026-02-02T01:27:20Z");          // true
@@ -122,7 +122,7 @@ import {
   emptyGuid,
   isGuidEmpty,
   areGuidsEqual,
-} from 'dotnet-typescript-utils';
+} from '@erdu-ec/dotnet-typescript-utils';
 
 // Validate
 isGuidString("550e8400-e29b-41d4-a716-446655440000");  // true
@@ -152,7 +152,7 @@ import {
   divideTimeSpan,
   zeroTimeSpan,
   isTimeSpanZero,
-} from 'dotnet-typescript-utils';
+} from '@erdu-ec/dotnet-typescript-utils';
 
 // Validate
 isTimeSpanString("01:23:45.1234567");  // true
@@ -198,7 +198,7 @@ isTimeSpanZero({ days: 0, hours: 0, minutes: 0, seconds: 0, milliseconds: 0, neg
 Use `toDateTimeString()` / `toDateOnlyString()` to convert `Date` objects to UTC strings, and `parseDateTime()` / `parseDateOnly()` to parse server responses back to `Date` objects.
 
 ```typescript
-import { toDateTimeString, toDateOnlyString, parseDateTime, parseDateOnly } from 'dotnet-typescript-utils';
+import { toDateTimeString, toDateOnlyString, parseDateTime, parseDateOnly } from '@erdu-ec/dotnet-typescript-utils';
 
 // Send to server
 const date = new Date();
@@ -215,7 +215,7 @@ For local display formatting, use the native `Date` methods (`getFullYear`, `get
 ## Type-Safe Usage
 
 ```typescript
-import { ISODateString, GUIDString, toDateTimeString, isDateTimeString } from 'dotnet-typescript-utils';
+import { ISODateString, GUIDString, toDateTimeString, isDateTimeString } from '@erdu-ec/dotnet-typescript-utils';
 
 // Type-safe function parameters
 function createEvent(date: ISODateString, organizerId: GUIDString) {

@@ -1,7 +1,6 @@
 packages:
   - 'nuxt-shared/backend-data'
   - 'dotnet-shared/*'
-  - 'dotnet-typescript-utils'
 
 allowBuilds:
   esbuild: true

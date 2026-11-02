@@ -1,5 +1,5 @@
 {
-  "name": "dotnet-typescript-utils",
+  "name": "@erdu-ec/dotnet-typescript-utils",
   "version": "1.1.0",
   "description": "TypeScript types for .NET Core 10 date, time, and value types",
   "main": "dist/index.js",
@@ -13,7 +13,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/public-npm/dotnet-typescript-utils.git"
+    "url": "git+https://github.com/Erdu-EC/public-npm-packages.git",
+    "directory": "dotnet-shared/typescript-utils"
   },
   "keywords": [
     "dotnet",
@@ -27,9 +28,12 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/public-npm/dotnet-typescript-utils/issues"
+    "url": "https://github.com/Erdu-EC/public-npm-packages/issues"
   },
-  "homepage": "https://github.com/public-npm/dotnet-typescript-utils#readme",
+  "homepage": "https://github.com/Erdu-EC/public-npm-packages/tree/main/dotnet-shared/typescript-utils#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "typescript": "^7.0.2"
   },

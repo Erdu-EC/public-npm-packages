@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - 'dotnet-typescript-utils/**'
-      - '.github/workflows/publish-dotnet-typescript-utils.yml'
+      - 'dotnet-shared/typescript-utils/**'
+      - '.github/workflows/dotnet-typescript-utils.yml'
   pull_request:
     paths:
-      - 'dotnet-typescript-utils/**'
+      - 'dotnet-shared/typescript-utils/**'
   workflow_dispatch:
 
 permissions:
@@ -40,13 +40,13 @@ jobs:
         run: pnpm install --frozen-lockfile=false
 
       - name: Run tests
-        run: pnpm --filter ./dotnet-typescript-utils run test
+        run: pnpm --filter ./dotnet-shared/typescript-utils run test
 
       - name: Typecheck
-        run: pnpm --filter ./dotnet-typescript-utils run typecheck
+        run: pnpm --filter ./dotnet-shared/typescript-utils run typecheck
 
       - name: Build package
-        run: pnpm --filter ./dotnet-typescript-utils run build
+        run: pnpm --filter ./dotnet-shared/typescript-utils run build
 
   publish-npm:
     name: Publish to npm
@@ -73,11 +73,11 @@ jobs:
         run: pnpm install --frozen-lockfile=false
 
       - name: Build package
-        run: pnpm --filter ./dotnet-typescript-utils run build
+        run: pnpm --filter ./dotnet-shared/typescript-utils run build
 
       - name: Get version from package.json
         id: package-version
-        run: echo "version=$(node -p "require('./dotnet-typescript-utils/package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./dotnet-shared/typescript-utils/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Check if tag exists
         id: tag-check
@@ -100,6 +100,6 @@ jobs:
 
       - name: Publish to npm
         if: steps.tag-check.outputs.exists == 'false'
-        run: pnpm --filter ./dotnet-typescript-utils publish --access public --no-git-checks --provenance
+        run: pnpm --filter ./dotnet-shared/typescript-utils publish --access public --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
