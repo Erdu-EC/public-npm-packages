@@ -123,7 +123,10 @@ jobs:
       - name: Build package
         run: pnpm --filter ./nuxt-shared/backend-data run build
 
+      - name: Rename package for GitHub Packages
+        run: node scripts/rename-gpr.js nuxt-shared/backend-data/package.json
+
       - name: Publish to GitHub Packages
-        run: pnpm --filter ./nuxt-shared/backend-data publish --no-git-checks
+        run: pnpm --filter ./nuxt-shared/backend-data publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

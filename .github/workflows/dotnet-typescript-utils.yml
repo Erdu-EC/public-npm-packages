@@ -126,7 +126,10 @@ jobs:
       - name: Build package
         run: pnpm --filter ./dotnet-shared/typescript-utils run build
 
+      - name: Rename package for GitHub Packages
+        run: node scripts/rename-gpr.js dotnet-shared/typescript-utils/package.json
+
       - name: Publish to GitHub Packages
-        run: pnpm --filter ./dotnet-shared/typescript-utils publish --no-git-checks
+        run: pnpm --filter ./dotnet-shared/typescript-utils publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
