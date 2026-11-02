@@ -1,11 +1,10 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import {
-  isValidTimeSpanString,
+  isTimeSpanString,
   timeSpanToMilliseconds,
-  millisecondsToTimeSpanString,
+  millisecondsToTimeSpan,
   splitTimeSpan,
-  timeSpanComponentsToString,
   addTimeSpans,
   subtractTimeSpans,
   multiplyTimeSpan,
@@ -14,25 +13,25 @@ import {
   isTimeSpanZero,
 } from '../utils';
 
-describe('isValidTimeSpanString', () => {
+describe('isTimeSpanString', () => {
   it('accepts HH:MM:SS format', () => {
-    assert.ok(isValidTimeSpanString('01:23:45'));
+    assert.ok(isTimeSpanString('01:23:45'));
   });
 
   it('accepts with fractional seconds', () => {
-    assert.ok(isValidTimeSpanString('01:23:45.1234567'));
+    assert.ok(isTimeSpanString('01:23:45.1234567'));
   });
 
   it('accepts days format', () => {
-    assert.ok(isValidTimeSpanString('7:01:23:45'));
+    assert.ok(isTimeSpanString('7:01:23:45'));
   });
 
   it('accepts negative TimeSpan', () => {
-    assert.ok(isValidTimeSpanString('-01:23:45'));
+    assert.ok(isTimeSpanString('-01:23:45'));
   });
 
   it('rejects invalid strings', () => {
-    assert.ok(!isValidTimeSpanString('not-a-timespan'));
+    assert.ok(!isTimeSpanString('not-a-timespan'));
   });
 });
 
@@ -55,21 +54,21 @@ describe('timeSpanToMilliseconds', () => {
   });
 });
 
-describe('millisecondsToTimeSpanString', () => {
+describe('millisecondsToTimeSpan', () => {
   it('converts ms to HH:MM:SS', () => {
-    assert.strictEqual(millisecondsToTimeSpanString(5025000), '01:23:45.000');
+    assert.strictEqual(millisecondsToTimeSpan(5025000), '01:23:45.000');
   });
 
   it('converts ms with days', () => {
-    assert.strictEqual(millisecondsToTimeSpanString(609825000), '7:01:23:45.000');
+    assert.strictEqual(millisecondsToTimeSpan(609825000), '7:01:23:45.000');
   });
 
   it('converts negative ms', () => {
-    assert.strictEqual(millisecondsToTimeSpanString(-5025000), '-01:23:45.000');
+    assert.strictEqual(millisecondsToTimeSpan(-5025000), '-01:23:45.000');
   });
 
   it('converts zero', () => {
-    assert.strictEqual(millisecondsToTimeSpanString(0), '00:00:00.000');
+    assert.strictEqual(millisecondsToTimeSpan(0), '00:00:00.000');
   });
 });
 
@@ -93,13 +92,6 @@ describe('splitTimeSpan', () => {
   it('toString reconstructs the string', () => {
     const components = splitTimeSpan('01:23:45.500');
     assert.strictEqual(components.toString(), '01:23:45.500');
-  });
-});
-
-describe('timeSpanComponentsToString', () => {
-  it('converts components to string', () => {
-    const components = { days: 0, hours: 1, minutes: 23, seconds: 45, milliseconds: 0, negative: false, toString: () => '' as any };
-    assert.strictEqual(timeSpanComponentsToString(components), '01:23:45.000');
   });
 });
 

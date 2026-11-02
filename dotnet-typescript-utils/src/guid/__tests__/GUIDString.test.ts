@@ -1,37 +1,37 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import {
-  isValidGuidString,
-  normalizeGuidString,
+  isGuidString,
+  normalizeGuid,
   emptyGuid,
   isGuidEmpty,
   areGuidsEqual,
 } from '../utils';
 
-describe('isValidGuidString', () => {
+describe('isGuidString', () => {
   it('accepts valid lowercase GUID', () => {
-    assert.ok(isValidGuidString('550e8400-e29b-41d4-a716-446655440000'));
+    assert.ok(isGuidString('550e8400-e29b-41d4-a716-446655440000'));
   });
 
   it('accepts valid uppercase GUID', () => {
-    assert.ok(isValidGuidString('550E8400-E29B-41D4-A716-446655440000'));
+    assert.ok(isGuidString('550E8400-E29B-41D4-A716-446655440000'));
   });
 
   it('rejects invalid strings', () => {
-    assert.ok(!isValidGuidString('not-a-guid'));
-    assert.ok(!isValidGuidString('550e8400e29b41d4a716446655440000'));
-    assert.ok(!isValidGuidString('a-b-c-d-e'));
+    assert.ok(!isGuidString('not-a-guid'));
+    assert.ok(!isGuidString('550e8400e29b41d4a716446655440000'));
+    assert.ok(!isGuidString('a-b-c-d-e'));
   });
 });
 
-describe('normalizeGuidString', () => {
+describe('normalizeGuid', () => {
   it('normalizes to lowercase', () => {
-    const result = normalizeGuidString('550E8400-E29B-41D4-A716-446655440000');
+    const result = normalizeGuid('550E8400-E29B-41D4-A716-446655440000');
     assert.strictEqual(result, '550e8400-e29b-41d4-a716-446655440000');
   });
 
   it('throws on invalid string', () => {
-    assert.throws(() => normalizeGuidString('invalid'), RangeError);
+    assert.throws(() => normalizeGuid('invalid'), RangeError);
   });
 });
 

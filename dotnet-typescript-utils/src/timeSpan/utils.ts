@@ -82,7 +82,7 @@ function toMilliseconds(input: TimeSpanInput): number {
 /**
  * Type guard: checks whether a string is a valid .NET TimeSpan format.
  */
-export function isValidTimeSpanString(value: string): value is TimeSpanString {
+export function isTimeSpanString(value: string): value is TimeSpanString {
   return TIMESPAN_RE.test(value) || TIMESPAN_DAYS_RE.test(value);
 }
 
@@ -94,7 +94,7 @@ export function isValidTimeSpanString(value: string): value is TimeSpanString {
  * @throws `RangeError` if the string is not a valid TimeSpan format.
  */
 export function timeSpanToMilliseconds(value: TimeSpanString): number {
-  if (!isValidTimeSpanString(value)) {
+  if (!isTimeSpanString(value)) {
     throw new RangeError(`Invalid TimeSpan string: "${value}"`);
   }
   return rawToMilliseconds(parseTimeSpanRaw(value));
@@ -104,7 +104,7 @@ export function timeSpanToMilliseconds(value: TimeSpanString): number {
  * Converts a duration in milliseconds to a .NET TimeSpan string.
  * The result always includes the `.fff` fractional part.
  */
-export function millisecondsToTimeSpanString(milliseconds: number): TimeSpanString {
+export function millisecondsToTimeSpan(milliseconds: number): TimeSpanString {
   const negative = milliseconds < 0;
   const absMs = Math.abs(milliseconds);
 
@@ -139,7 +139,7 @@ export function millisecondsToTimeSpanString(milliseconds: number): TimeSpanStri
  * @throws `RangeError` if the string is not a valid TimeSpan format.
  */
 export function splitTimeSpan(value: TimeSpanString): TimeSpanComponents {
-  if (!isValidTimeSpanString(value)) {
+  if (!isTimeSpanString(value)) {
     throw new RangeError(`Invalid TimeSpan string: "${value}"`);
   }
 
@@ -154,25 +154,19 @@ export function splitTimeSpan(value: TimeSpanString): TimeSpanComponents {
     milliseconds,
     negative: raw.negative,
     toString(): TimeSpanString {
-      return millisecondsToTimeSpanString(componentsToMilliseconds(components));
+      return millisecondsToTimeSpan(componentsToMilliseconds(components));
     },
   };
   return components;
 }
 
-/**
- * Converts `TimeSpanComponents` to a .NET TimeSpan string.
- */
-export function timeSpanComponentsToString(components: TimeSpanComponents): TimeSpanString {
-  return millisecondsToTimeSpanString(componentsToMilliseconds(components));
-}
 
 /**
  * Adds two TimeSpan values and returns the result as a TimeSpan string.
  * Accepts both `TimeSpanString` and `TimeSpanComponents`.
  */
 export function addTimeSpans(a: TimeSpanInput, b: TimeSpanInput): TimeSpanString {
-  return millisecondsToTimeSpanString(toMilliseconds(a) + toMilliseconds(b));
+  return millisecondsToTimeSpan(toMilliseconds(a) + toMilliseconds(b));
 }
 
 /**
@@ -180,7 +174,7 @@ export function addTimeSpans(a: TimeSpanInput, b: TimeSpanInput): TimeSpanString
  * Accepts both `TimeSpanString` and `TimeSpanComponents`.
  */
 export function subtractTimeSpans(a: TimeSpanInput, b: TimeSpanInput): TimeSpanString {
-  return millisecondsToTimeSpanString(toMilliseconds(a) - toMilliseconds(b));
+  return millisecondsToTimeSpan(toMilliseconds(a) - toMilliseconds(b));
 }
 
 /**
@@ -188,7 +182,7 @@ export function subtractTimeSpans(a: TimeSpanInput, b: TimeSpanInput): TimeSpanS
  * Accepts both `TimeSpanString` and `TimeSpanComponents`.
  */
 export function multiplyTimeSpan(timeSpan: TimeSpanInput, factor: number): TimeSpanString {
-  return millisecondsToTimeSpanString(toMilliseconds(timeSpan) * factor);
+  return millisecondsToTimeSpan(toMilliseconds(timeSpan) * factor);
 }
 
 /**
@@ -201,7 +195,7 @@ export function divideTimeSpan(timeSpan: TimeSpanInput, divisor: number): TimeSp
   if (divisor === 0) {
     throw new RangeError('Cannot divide TimeSpan by zero');
   }
-  return millisecondsToTimeSpanString(Math.trunc(toMilliseconds(timeSpan) / divisor));
+  return millisecondsToTimeSpan(Math.trunc(toMilliseconds(timeSpan) / divisor));
 }
 
 /**

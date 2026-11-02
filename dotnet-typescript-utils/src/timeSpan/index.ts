@@ -1,10 +1,9 @@
 export type { TimeSpanComponents, TimeSpanString } from './TimeSpanString';
 export {
-  isValidTimeSpanString,
+  isTimeSpanString,
   timeSpanToMilliseconds,
-  millisecondsToTimeSpanString,
+  millisecondsToTimeSpan,
   splitTimeSpan,
-  timeSpanComponentsToString,
   addTimeSpans,
   subtractTimeSpans,
   multiplyTimeSpan,

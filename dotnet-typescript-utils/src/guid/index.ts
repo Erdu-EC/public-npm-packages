@@ -1,7 +1,7 @@
 export type { GUIDString } from './GUIDString';
 export {
-  isValidGuidString,
-  normalizeGuidString,
+  isGuidString,
+  normalizeGuid,
   emptyGuid,
   isGuidEmpty,
   areGuidsEqual,
