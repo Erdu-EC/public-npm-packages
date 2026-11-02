@@ -1,31 +1,35 @@
 # public-npm-packages
 
-Monorepo con paquetes NPM públicos.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm: dotnet-typescript-utils](https://img.shields.io/npm/v/@erdu.dev/dotnet-typescript-utils.svg)](https://www.npmjs.com/package/@erdu.dev/dotnet-typescript-utils)
+[![npm: nuxt-backend-data](https://img.shields.io/npm/v/@erdu.dev/nuxt-backend-data.svg)](https://www.npmjs.com/package/@erdu.dev/nuxt-backend-data)
 
-## Paquetes
+Monorepo for public NPM packages under the `@erdu.dev` scope.
 
-| Paquete | Descripción | README |
+## Packages
+
+| Package | Description | Documentation |
 | --- | --- | --- |
-| [@erdu-ec/dotnet-typescript-utils](./dotnet-shared/typescript-utils) | Tipos de TypeScript y utilidades para fechas, horas y tipos de valor de .NET 8+. Incluye tipos de literales de plantilla y funciones de validación y conversión para DateTime, DateOnly, Guid y TimeSpan. | [Ver README](./dotnet-shared/typescript-utils/README.md) |
-| [@erdu-ec/nuxt-backend-data](./nuxt-shared/backend-data) | Arquitectura fuertemente tipada para consumo de APIs en Nuxt 4. Factories de endpoints, composables reactivos/imperativos, soporte multi-API con `createApiScope` y módulo Nuxt auto-importable. | [Ver README](./nuxt-shared/backend-data/README.md) |
+| [@erdu.dev/dotnet-typescript-utils](./dotnet-shared/typescript-utils) | TypeScript types and utilities for .NET 8+ date, time, and value types. Includes template literal types and validation and conversion functions for DateTime, DateOnly, Guid, and TimeSpan. | [README](./dotnet-shared/typescript-utils/README.md) |
+| [@erdu.dev/nuxt-backend-data](./nuxt-shared/backend-data) | Strongly-typed architecture for API consumption in Nuxt 4. Endpoint factories, reactive/imperative composables, multi-API support with `createApiScope`, and an auto-importable Nuxt module. | [README](./nuxt-shared/backend-data/README.md) |
 
-## Desarrollo
+## Development
 
 ```bash
-# Instalar dependencias
+# Install dependencies
 pnpm install
 
-# Compilar todos los paquetes
+# Build all packages
 pnpm build
 
-# Typecheck en todos los paquetes
+# Type-check all packages
 pnpm typecheck
 ```
 
-## Publicación
+## Publishing
 
-Los paquetes se publican en GitHub Packages bajo el scope `@erdu-ec`. Cada paquete gestiona su propia configuración de `package.json` y publicación.
+Packages are published on GitHub Packages under the `@erdu.dev` scope. Each package manages its own `package.json` configuration and publishing.
 
-## Licencia
+## License
 
 [MIT](./LICENSE)
