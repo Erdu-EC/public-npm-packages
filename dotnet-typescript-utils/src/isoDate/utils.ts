@@ -64,7 +64,7 @@ export function parseDateTime(value: ISODateString): Date {
 }
 
 /**
- * Parses a .NET DateOnly string and returns a JavaScript `Date` at midnight UTC.
+ * Parses a .NET DateOnly string and returns a JavaScript `Date` at midnight local time.
  *
  * @throws `RangeError` if the string is not a valid DateOnly format.
  */
@@ -80,11 +80,11 @@ export function parseDateOnly(value: ISODateOnlyString): Date {
 
     const [, year, month, day] = match;
 
-    return new Date(Date.UTC(
+    return new Date(
         parseInt(year, 10),
         parseInt(month, 10) - 1,
         parseInt(day, 10)
-    ));
+    );
 }
 
 /**
@@ -97,12 +97,12 @@ export function toDateTimeString(date: Date): ISODateString {
 }
 
 /**
- * Converts a JavaScript `Date` to a .NET DateOnly string (UTC date portion).
+ * Converts a JavaScript `Date` to a .NET DateOnly string (local date portion).
  */
 export function toDateOnlyString(date: Date): ISODateOnlyString {
-    const year = String(date.getUTCFullYear()).padStart(4, '0');
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(date.getUTCDate()).padStart(2, '0');
+    const year = String(date.getFullYear()).padStart(4, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}` as ISODateOnlyString;
 }

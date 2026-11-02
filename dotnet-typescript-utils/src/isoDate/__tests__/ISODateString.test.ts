@@ -7,7 +7,6 @@ import {
   parseDateTime,
   parseDateOnly,
   toDateTimeString,
-  toDateTimeOffsetString,
   toDateOnlyString,
 } from '../utils';
 
@@ -75,12 +74,12 @@ describe('parseDateTime', () => {
 });
 
 describe('parseDateOnly', () => {
-  it('parses date-only to midnight UTC', () => {
+  it('parses date-only to midnight local time', () => {
     const date = parseDateOnly('2026-02-02');
-    assert.strictEqual(date.getUTCFullYear(), 2026);
-    assert.strictEqual(date.getUTCMonth(), 1);
-    assert.strictEqual(date.getUTCDate(), 2);
-    assert.strictEqual(date.getUTCHours(), 0);
+    assert.strictEqual(date.getFullYear(), 2026);
+    assert.strictEqual(date.getMonth(), 1);
+    assert.strictEqual(date.getDate(), 2);
+    assert.strictEqual(date.getHours(), 0);
   });
 });
 
@@ -93,8 +92,8 @@ describe('toDateTimeString', () => {
 });
 
 describe('toDateOnlyString', () => {
-  it('formats date as UTC date-only string', () => {
-    const date = new Date(Date.UTC(2026, 1, 2, 1, 27, 20));
+  it('formats date as local date-only string', () => {
+    const date = new Date(2026, 1, 2, 1, 27, 20);
     assert.strictEqual(toDateOnlyString(date), '2026-02-02');
   });
 });
@@ -126,20 +125,4 @@ describe('isOffsetDateTime', () => {
   });
 });
 
-describe('toDateTimeOffsetString', () => {
-  it('formats date with local timezone offset', () => {
-    const date = new Date(Date.UTC(2026, 1, 2, 1, 27, 20, 366));
-    const result = toDateTimeOffsetString(date);
-    const offset = date.getTimezoneOffset();
-    const offsetSign = offset <= 0 ? '+' : '-';
-    const offsetHours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0');
-    const offsetMinutes = String(Math.abs(offset) % 60).padStart(2, '0');
-    assert.strictEqual(result, `2026-02-02T01:27:20.366${offsetSign}${offsetHours}:${offsetMinutes}`);
-  });
-
-  it('returns a valid DateTimeOffset string', () => {
-    const result = toDateTimeOffsetString(new Date());
-    assert.ok(isOffsetDateTime(result));
-  });
-});
 

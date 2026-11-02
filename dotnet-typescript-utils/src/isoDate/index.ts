@@ -6,6 +6,5 @@ export {
   parseDateTime,
   parseDateOnly,
   toDateTimeString,
-  toDateTimeOffsetString,
   toDateOnlyString,
 } from './utils';
