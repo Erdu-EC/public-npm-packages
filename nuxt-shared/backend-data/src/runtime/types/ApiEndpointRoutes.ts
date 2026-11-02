@@ -4,7 +4,7 @@
  * Consumer applications can augment this interface using TypeScript module augmentation:
  *
  * ```ts
- * declare module '@erdu-ec/nuxt-backend-data' {
+ * declare module '@erdu.dev/nuxt-backend-data' {
  *   interface ApiEndpointRoutes extends MyCustomApiRoutes {}
  * }
  * ```

@@ -17,7 +17,7 @@ export interface ModulePublicRuntimeConfig {
 
 const module: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
     meta: {
-        name: '@erdu-ec/nuxt-backend-data',
+        name: '@erdu.dev/nuxt-backend-data',
         configKey: 'backendData',
         compatibility: {
             nuxt: '>=4.0.0'

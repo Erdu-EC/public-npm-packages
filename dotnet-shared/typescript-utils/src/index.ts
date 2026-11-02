@@ -1,5 +1,5 @@
 /**
- * @erdu-ec/dotnet-typescript-utils
+ * @erdu.dev/dotnet-typescript-utils
  *
  * TypeScript types and utilities for .NET Core 10 date, time, and value types.
  * All date operations handle dates as UTC.
