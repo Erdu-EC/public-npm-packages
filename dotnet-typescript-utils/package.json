@@ -1,0 +1,40 @@
+{
+  "name": "dotnet-typescript-utils",
+  "version": "1.1.0",
+  "description": "TypeScript types for .NET Core 10 date, time, and value types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "npx tsx --test 'src/**/__tests__/*.test.ts'",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/public-npm/dotnet-typescript-utils.git"
+  },
+  "keywords": [
+    "dotnet",
+    "typescript",
+    "types",
+    "datetime",
+    "iso8601",
+    "guid",
+    "timespan"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/public-npm/dotnet-typescript-utils/issues"
+  },
+  "homepage": "https://github.com/public-npm/dotnet-typescript-utils#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}

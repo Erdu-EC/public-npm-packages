@@ -11,22 +11,21 @@
 
 export type { ISODateOnlyString, ISODateString, DateTimeOffsetString } from './isoDate';
 export {
-  isValidDateTimeString,
-  isValidDateOnlyString,
-  isDateTimeOffsetString,
-  dateTimeStringToDate,
-  dateOnlyStringToDate,
-  dateToDateTimeString,
-  dateToDateTimeOffsetString,
-  dateToDateOnlyString,
+  isDateTimeString,
+  isDateOnlyString,
+  isOffsetDateTime,
+  parseDateTime,
+  parseDateOnly,
+  toDateTimeString,
+  toDateOnlyString,
 } from './isoDate';
 
 // ─── Guid ────────────────────────────────────────────────────────────────────
 
 export type { GUIDString } from './guid';
 export {
-  isValidGuidString,
-  normalizeGuidString,
+  isGuidString,
+  normalizeGuid,
   emptyGuid,
   isGuidEmpty,
   areGuidsEqual,
@@ -37,11 +36,10 @@ export {
 export type { TimeSpanString } from './timeSpan';
 export {
   TimeSpanComponents,
-  isValidTimeSpanString,
+  isTimeSpanString,
   timeSpanToMilliseconds,
-  millisecondsToTimeSpanString,
+  millisecondsToTimeSpan,
   splitTimeSpan,
-  timeSpanComponentsToString,
   addTimeSpans,
   subtractTimeSpans,
   multiplyTimeSpan,
