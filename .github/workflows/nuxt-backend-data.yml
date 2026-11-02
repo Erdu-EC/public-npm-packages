@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
   id-token: write
 
@@ -68,7 +68,31 @@ jobs:
       - name: Build package
         run: pnpm --filter ./nuxt-shared/backend-data run build
 
+      - name: Get version from package.json
+        id: package-version
+        run: echo "version=$(node -p "require('./nuxt-shared/backend-data/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: tag-check
+        run: |
+          TAG="nuxt-shared/v${{ steps.package-version.outputs.version }}"
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and push tag
+        if: steps.tag-check.outputs.exists == 'false'
+        run: |
+          TAG="nuxt-shared/v${{ steps.package-version.outputs.version }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git tag "$TAG"
+          git push origin "$TAG"
+
       - name: Publish to npm
+        if: steps.tag-check.outputs.exists == 'false'
         run: pnpm --filter ./nuxt-shared/backend-data publish --access public --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -78,7 +78,7 @@ jobs:
       - name: Check if tag exists
         id: tag-check
         run: |
-          TAG="v${{ steps.package-version.outputs.version }}"
+          TAG="dotnet-shared/v${{ steps.package-version.outputs.version }}"
           if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
@@ -88,7 +88,7 @@ jobs:
       - name: Create and push tag
         if: steps.tag-check.outputs.exists == 'false'
         run: |
-          TAG="v${{ steps.package-version.outputs.version }}"
+          TAG="dotnet-shared/v${{ steps.package-version.outputs.version }}"
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git tag "$TAG"
